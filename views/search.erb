@@ -5,17 +5,42 @@
   <button type="submit">Search</button>
 </form>
 
+<% if false %>
 <% if params[:query] %>
   <% case %>
-  <% when @result_arr.empty? %>
+  <% when @result_chap.empty? %>
     <p>Sorry, no matches were found</p>
   <% else %>
     <h2 class="content-subhead"> Results for '<%= params[:query] %>'</h2>
 
-    <% @result_arr.each do |result| %>
+    <% @result_chap.each do |result| %>
       <ul>
         <li><a href="/chapter/<%= result %>"><%= @toc[result-1] %></a></li>
       </ul>
     <% end %>
   <% end %>
 <% end %>
+<% end %>
+
+<% if params[:query] %>
+  <% case %>
+  <% when @result.empty? %>
+    <p>Sorry, no matches were found</p>
+  <% else %>
+    <h2 class="content-subhead"> Results for '<%= params[:query] %>'</h2>
+    <% @result.keys.each do |chap_num| %>
+      <ul>
+        <li><%= @toc[chap_num-1] %></li>
+        <% @result[chap_num].each do |couple| %>
+          <ul>
+            <li><a href="/chapters/<%= chap_num %>#<%= couple.first %>"> <%= highlight(in_paragraphs(couple.last)) %></a></li>
+          </ul>
+
+        <% end %>
+
+
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>
+

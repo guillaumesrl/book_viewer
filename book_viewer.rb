@@ -8,18 +8,32 @@ end
 
 helpers do 
   def in_paragraphs(text)
-    text.split("\n\n").map { |paragraph| "<p> #{paragraph} </p>"}.join
+    text.split("\n\n").map.with_index { |paragraph, idx| "<p id=#{idx}> #{paragraph} </p>"}.join
   end
 end
 
+helpers do
+  def highlight(text)
+    text.gsub(params[:query], "<strong> #{params[:query]} </strong>")
+  end
+end
 
-
-def search_query(query)
+def search_chapters(query)
   return nil if query.nil?
   (1..@toc.size).select { |chap_num| File.read("data/chp#{chap_num}.txt").downcase.match?(query.downcase) }
 end
 
+def search_content(query)
+  return nil if query.nil?
+  result = Hash.new { |hash, key| hash[key] = [] }
+  (1..@toc.size).each do |chap_num|
+    chap_content = File.read("data/chp#{chap_num}.txt").split("\n\n")
+    chap_content.each_with_index { |content, id| result[chap_num] << [id, content] if content.downcase.match?(query.downcase)}
+  end
+  result
+end
 
+# result = {1 => [id, id ,id]}
 
 get "/" do
   @title = "homepage"
@@ -41,6 +55,6 @@ not_found do
 end
 
 get "/search" do
-  @result_arr = search_query(params[:query])
+  @result = search_content(params[:query])
   erb :search
 end
