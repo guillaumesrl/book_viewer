@@ -5,22 +5,6 @@
   <button type="submit">Search</button>
 </form>
 
-<% if false %>
-<% if params[:query] %>
-  <% case %>
-  <% when @result_chap.empty? %>
-    <p>Sorry, no matches were found</p>
-  <% else %>
-    <h2 class="content-subhead"> Results for '<%= params[:query] %>'</h2>
-
-    <% @result_chap.each do |result| %>
-      <ul>
-        <li><a href="/chapter/<%= result %>"><%= @toc[result-1] %></a></li>
-      </ul>
-    <% end %>
-  <% end %>
-<% end %>
-<% end %>
 
 <% if params[:query] %>
   <% case %>

@@ -1,5 +1,5 @@
 require "sinatra"
-require "sinatra/reloader"
+require "sinatra/reloader" if development?
 require "tilt/erubis"
 
 before do
@@ -16,11 +16,6 @@ helpers do
   def highlight(text)
     text.gsub(params[:query], "<strong> #{params[:query]} </strong>")
   end
-end
-
-def search_chapters(query)
-  return nil if query.nil?
-  (1..@toc.size).select { |chap_num| File.read("data/chp#{chap_num}.txt").downcase.match?(query.downcase) }
 end
 
 def search_content(query)
